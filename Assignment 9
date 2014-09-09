@@ -1,0 +1,82 @@
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+// Assignment #: 9
+//         Name: Dylan Sanders
+//    StudentID: 1206657071
+//   Class Time: 4:30-5:45 TTh
+//  Description: The Assignment 9 takes in a sequence of doubles until it reads 0,
+//	then it finds the max, counts the amount of negative numbers, and adds the positives.
+
+public class Assignment9 {
+	
+	public static void main(String[] args) {
+		
+		Scanner scan = new Scanner(System.in);		//Setting up Scanner
+		
+		int count = 1;
+		double[] numbers = new double[100];
+		double nums = scan.nextDouble();			//Initializing array and variables
+		numbers[0] = nums;
+		
+		while(nums != 0) {							//While loop to exclude 0
+			nums = scan.nextDouble();
+			numbers[count] = nums;					//Adding inputs to the array
+			count++;
+		}
+		
+		DecimalFormat fmt = new DecimalFormat("0.##");		//Setting up the format for numbers
+		
+		System.out.println("The maximum number is " + fmt.format(findMax(numbers, count)));
+		System.out.println("The total number of negative numbers is " + countNegative(numbers, count));
+		System.out.println("The sum of positive numbers is " + fmt.format(computeSumPositive(numbers, count)));			//Printing the formated output
+	}
+	
+	//*****************************************************************************
+	//		Takes the array and the count of numbers in the array as arguments and
+	//		sorts through the array to find and return the maximum.
+	//*****************************************************************************
+	
+	public static double findMax(double[] numbers, int count) {
+		
+		if(count == 1) 											//Base case returns first number in array
+			return numbers[count-1];
+		else {
+			if(findMax(numbers, count-1) > numbers[count-1])	//Compares the numbers to find max
+				return findMax(numbers, count -1);				
+			else
+				return numbers[count-1];						//Returns found max
+		}
+	}
+	
+	//*****************************************************************************
+	//		Takes the array and the count of numbers in the array as arguments and
+	//		counts the number of negatives in the array.
+	//*****************************************************************************
+	
+	public static int countNegative(double[] numbers, int count) {
+		
+		if(count < 0)												//Base case
+			return 0;
+		else if(numbers[count] < 0)
+			return 1 + countNegative(numbers, count - 1);			//Checks if the number is negative, if it is,
+		else														//add 1 to the index and call again, if not
+			return countNegative(numbers, count-1);					//call again without adding
+			
+	}
+	
+	//*****************************************************************************
+	//		Takes the array and the count of numbers in the array as arguments and
+	//		computes the sum of the positive numbers.
+	//*****************************************************************************
+	
+	public static double computeSumPositive(double[] numbers, int count) {
+		
+		if(count < 0)												//Base case
+			return 0;
+		if(numbers[count] > 0) 													//Checks if the number is positive, if it is
+			return numbers[count] + computeSumPositive(numbers, count-1);		//add the number to the sum and call again, if not
+		else																	//call again without adding.
+			return computeSumPositive(numbers, count-1);
+	}
+}
